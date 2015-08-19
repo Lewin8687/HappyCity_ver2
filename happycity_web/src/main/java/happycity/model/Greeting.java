@@ -1,4 +1,4 @@
-package happycity.welcome.model;
+package happycity.model;
 
 public class Greeting {
 
