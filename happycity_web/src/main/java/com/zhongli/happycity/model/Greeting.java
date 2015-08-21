@@ -1,4 +1,4 @@
-package happycity.model;
+package com.zhongli.happycity.model;
 
 public class Greeting {
 
