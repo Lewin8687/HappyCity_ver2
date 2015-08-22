@@ -1,29 +1,14 @@
 =========
+本项目IDE为Eclipse，下载到本地直接导入即可
 
-## Login and Registration Example Project with Spring Security
+在教程基础上进行学习和修改
+利用SpringSecurity 实现基于角色的用户访问控制
+注册登录等一系列问题的策略：
+激活需要邮箱。
 
+框架的设置都在spring包下和resources文件夹下。
 
-### Relevant Articles: 
-- [Spring Security Registration Tutorial](http://www.baeldung.com/spring-security-registration)
-
-
-
-### Build the Project
-```
-mvn clean install
-```
+发现问题：
+不知道为什么hasRole里面的参数是权限而不是角色。。
 
 
-### Set up MySQL
-```
-mysql -u root -p 
-> CREATE USER 'tutorialuser'@'localhost' IDENTIFIED BY 'tutorialmy5ql';
-> GRANT ALL PRIVILEGES ON *.* TO 'tutorialuser'@'localhost';
-> FLUSH PRIVILEGES;
-```
-
-
-### Set up Email
-
-You need to configure the email by renaming file "email.properties.sample" to "email.properties" and provide your own username and password.
-You also need to use your own host, you can use Amazon or Google for example.

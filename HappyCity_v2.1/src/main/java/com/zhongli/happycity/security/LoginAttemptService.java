@@ -12,6 +12,7 @@ import com.google.common.cache.LoadingCache;
 @Service
 public class LoginAttemptService {
 
+	//允许的最多尝试次数
     private final int MAX_ATTEMPT = 10;
     private LoadingCache<String, Integer> attemptsCache;
 

@@ -27,11 +27,11 @@ ${param.message}
 </div>
 </c:if>
             <h1>This is the landing page for the admin</h1>
-            <sec:authorize access="hasRole('READ_PRIVILEGE')">
+            <sec:authorize access="hasRole('BASIC_PRIVILEGE')">
         This text is only visible to a user
         <br />
             </sec:authorize>
-            <sec:authorize access="hasRole('WRITE_PRIVILEGE')">
+            <sec:authorize access="hasRole('MANAGE_PRIVILEGE')">
         This text is only visible to an admin
         <br />
             </sec:authorize>

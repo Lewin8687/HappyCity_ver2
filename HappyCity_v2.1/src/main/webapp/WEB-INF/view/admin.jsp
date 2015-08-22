@@ -23,10 +23,10 @@
 </nav>
 
     <div class="container">
-            <sec:authorize ifNotGranted="WRITE_PRIVILEGE">
+            <sec:authorize ifNotGranted="MANAGE_PRIVILEGE">
                 <spring:message code="message.unauth"></spring:message>
             </sec:authorize>
-            <sec:authorize ifAnyGranted="WRITE_PRIVILEGE">
+            <sec:authorize ifAnyGranted="MANAGE_PRIVILEGE">
                 <h1>
                     <spring:message code="label.pages.admin.message"></spring:message>
                 </h1>

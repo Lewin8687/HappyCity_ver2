@@ -13,7 +13,7 @@
 <title><spring:message code="message.updatePassword"></spring:message></title>
 </head>
 <body>
-<sec:authorize access="hasRole('READ_PRIVILEGE')">
+<sec:authorize access="hasRole('BASIC_PRIVILEGE')">
     <div class="container">
         <div class="row">
             <h1> <spring:message code="message.resetYourPassword"></spring:message> </h1>

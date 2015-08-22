@@ -29,7 +29,7 @@ import com.zhongli.happycity.spring.PersistenceJPAConfig;
 @ContextConfiguration(classes = { ConfigTest.class, PersistenceJPAConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class ChangePasswordApiTest {
 
-    private final String URL_PREFIX = "http://localhost:8080/spring-security-login-and-registration";
+    private final String URL_PREFIX = "http://localhost:8080/happycity";
     private final String URL = URL_PREFIX + "/user/updatePassword";
 
     @Autowired

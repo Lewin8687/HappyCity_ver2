@@ -39,29 +39,51 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
 	@Override
 	@Transactional
+	// 程序初始化时的数据
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
 		if (alreadySetup) {
 			return;
 		}
 
 		// == create initial privileges
-		final Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-		final Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-
+		// 标注数据的权限
+		final Privilege basicPrivilege = createPrivilegeIfNotFound("BASIC_PRIVILEGE");
+		// 标注数据的权限
+		final Privilege markPrivilege = createPrivilegeIfNotFound("MARK_PRIVILEGE");
+		// 后台管理的权限
+		final Privilege managePrivilege = createPrivilegeIfNotFound("MANAGE_PRIVILEGE");
+		// 获取数据的权限
+		final Privilege getDataPrivilege = createPrivilegeIfNotFound("GET_DATA_PRIVILEGE");
+		// 添加公共监听区域的权限
+		final Privilege addPublicAreaPrivilege = createPrivilegeIfNotFound("ADD_PUBLIC_AREA_PRIVILEGE");
+		// 添加私有监听区域的权限
+		final Privilege addPrivateAreaPrivilege = createPrivilegeIfNotFound("ADD_PRIVATE_AREA_PRIVILEGE");
 		// == create initial roles
-		final List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
+		final List<Privilege> adminPrivileges = Arrays.asList(markPrivilege, managePrivilege,
+				addPublicAreaPrivilege);
+		// 管理员角色
 		createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-		createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
+		// 研究人员角色
+		createRoleIfNotFound("ROLE_REACHER", Arrays.asList(basicPrivilege, getDataPrivilege, markPrivilege,
+				addPublicAreaPrivilege, addPrivateAreaPrivilege));
+		// 学生角色
+		createRoleIfNotFound("ROLE_STUDENT", Arrays.asList(basicPrivilege, markPrivilege, addPublicAreaPrivilege));
+		// 普通用户角色
+		createRoleIfNotFound("ROLE_USER", Arrays.asList(basicPrivilege, markPrivilege));
 
-		final Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-		final User user = new User();
-		user.setFirstName("Test");
-		user.setLastName("Test");
-		user.setPassword(passwordEncoder.encode("test"));
-		user.setEmail("test@test.com");
-		user.setRoles(Arrays.asList(adminRole));
-		user.setEnabled(true);
-		userRepository.save(user);
+		// ==添加初始的账号
+		// 添加默认的管理员用户
+		createUserIfNotFound("admin@admin.com", "admin", "admin", "admin",
+				Arrays.asList(roleRepository.findByName("ROLE_ADMIN")));
+		// 添加默认的学生员用户
+		createUserIfNotFound("student@student.com", "student", "student", "student",
+				Arrays.asList(roleRepository.findByName("ROLE_USER"), roleRepository.findByName("ROLE_STUDENT")));
+		// 添加默认的研究人员用户
+		createUserIfNotFound("reacher@reacher.com", "reacher", "reacher", "reacher",
+				Arrays.asList(roleRepository.findByName("ROLE_USER"), roleRepository.findByName("ROLE_REACHER")));
+		// 添加默认的普通用户
+		createUserIfNotFound("user@user.com", "user", "user", "user",
+				Arrays.asList(roleRepository.findByName("ROLE_USER")));
 
 		alreadySetup = true;
 	}
@@ -85,6 +107,25 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			roleRepository.save(role);
 		}
 		return role;
+	}
+
+	@Transactional
+	private final User createUserIfNotFound(final String email, final String firstName, final String lastName,
+			final String password, List<Role> roles) {
+		User user = userRepository.findByEmail(email);
+		if (user == null) {
+			user = new User();
+			user.setFirstName(firstName);
+			user.setLastName(lastName);
+			user.setPassword(passwordEncoder.encode(password));
+			user.setEmail(email);
+			user.setRoles(roles);
+			user.setEnabled(true);
+			userRepository.save(user);
+		} else {
+			System.out.println(user.getEmail() + " is already exits.");
+		}
+		return user;
 	}
 
 }

@@ -51,11 +51,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		registry.addViewController("/forgetPassword.html");
 		registry.addViewController("/updatePassword.html");
 		registry.addViewController("/changePassword.html");
+		registry.addViewController("/index.html");
 	}
 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	@Override
@@ -67,13 +68,14 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
 	// beans
 
+
 	@Bean
 	public ViewResolver viewResolver() {
 		final InternalResourceViewResolver bean = new InternalResourceViewResolver();
 		bean.setViewClass(JstlView.class);
 		bean.setPrefix("/WEB-INF/view/");
-		 bean.setSuffix(".jsp");
-		//bean.setSuffix(".html");
+		bean.setSuffix(".jsp");
+		// bean.setSuffix(".html");
 		return bean;
 	}
 
