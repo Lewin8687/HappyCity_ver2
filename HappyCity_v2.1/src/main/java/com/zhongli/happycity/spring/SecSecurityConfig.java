@@ -125,13 +125,21 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
               .antMatchers( "/user/**" ).hasRole( "USER" ).anyRequest().authenticated()
 				.and()
 				.formLogin()
-				.loginPage("/login.html").loginProcessingUrl("/j_spring_security_check")
+				.loginPage("/login.html").
+				loginProcessingUrl("/j_spring_security_check")
 				.defaultSuccessUrl("/homepage.html").failureUrl("/login.html?error=true")
 				.successHandler(myAuthenticationSuccessHandler).usernameParameter("j_username")
-				.passwordParameter("j_password").permitAll().and().sessionManagement()
-				.invalidSessionUrl("/invalidSession.html").sessionFixation().none().and().logout()
+				.passwordParameter("j_password").permitAll()
+				.and()
+				.logout()
 				.invalidateHttpSession(false).logoutUrl("/j_spring_security_logout")
-				.logoutSuccessUrl("/logout.html?logSucc=true").deleteCookies("JSESSIONID").permitAll();
+				.logoutSuccessUrl("/logout.html?logSucc=true").deleteCookies("JSESSIONID").permitAll()
+				.and()
+				.sessionManagement()
+				.invalidSessionUrl("/invalidSession.html")
+				.sessionFixation()
+				.none()
+				.maximumSessions( 1 );
 		// @formatter:on
 	}
 
