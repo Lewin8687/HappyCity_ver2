@@ -1,12 +1,25 @@
 package com.zhongli.happycity.web.controller;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.zhongli.happycity.persistence.model.PasswordResetToken;
+import com.zhongli.happycity.persistence.model.Role;
+import com.zhongli.happycity.persistence.model.User;
+import com.zhongli.happycity.persistence.model.VerificationToken;
+import com.zhongli.happycity.persistence.service.IUserService;
+import com.zhongli.happycity.persistence.service.UserDto;
+import com.zhongli.happycity.registration.OnRegistrationCompleteEvent;
+import com.zhongli.happycity.validation.EmailExistsException;
+import com.zhongli.happycity.web.error.InvalidOldPasswordException;
+import com.zhongli.happycity.web.error.UserAlreadyExistException;
+import com.zhongli.happycity.web.error.UserNotFoundException;
+import com.zhongli.happycity.web.util.GenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +39,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.zhongli.happycity.persistence.model.PasswordResetToken;
-import com.zhongli.happycity.persistence.model.User;
-import com.zhongli.happycity.persistence.model.VerificationToken;
-import com.zhongli.happycity.persistence.service.IUserService;
-import com.zhongli.happycity.persistence.service.UserDto;
-import com.zhongli.happycity.registration.OnRegistrationCompleteEvent;
-import com.zhongli.happycity.validation.EmailExistsException;
-import com.zhongli.happycity.web.error.InvalidOldPasswordException;
-import com.zhongli.happycity.web.error.UserAlreadyExistException;
-import com.zhongli.happycity.web.error.UserNotFoundException;
-import com.zhongli.happycity.web.util.GenericResponse;
 
 @Controller
 public class RegistrationController {
@@ -161,10 +162,11 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/user/savePassword", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('BASIC_PRIVILEGE')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseBody
     public GenericResponse savePassword(final Locale locale, @RequestParam("password") final String password) {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(((List<Role>)user.getRoles()).get(0));
         userService.changeUserPassword(user, password);
         return new GenericResponse(messages.getMessage("message.resetPasswordSuc", null, locale));
     }
@@ -172,7 +174,7 @@ public class RegistrationController {
     // change user password
 
     @RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('BASIC_PRIVILEGE')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseBody
     public GenericResponse changeUserPassword(final Locale locale, @RequestParam("password") final String password, @RequestParam("oldpassword") final String oldPassword) {
         final User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());

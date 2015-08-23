@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%> 
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -13,7 +13,7 @@
 <title><spring:message code="message.updatePassword"></spring:message></title>
 </head>
 <body>
-<sec:authorize access="hasRole('BASIC_PRIVILEGE')">
+<sec:authorize access="hasRole('ROLE_USER')">
     <div class="container">
         <div class="row">
             <h1> <spring:message code="message.resetYourPassword"></spring:message> </h1>

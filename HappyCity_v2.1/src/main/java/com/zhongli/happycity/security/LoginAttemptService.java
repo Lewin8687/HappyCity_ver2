@@ -28,6 +28,7 @@ public class LoginAttemptService {
 
     //
 
+    //清除失败次数
     public void loginSucceeded(final String key) {
         attemptsCache.invalidate(key);
     }

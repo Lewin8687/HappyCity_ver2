@@ -54,8 +54,9 @@ public class MyUserDetailsService implements UserDetailsService {
 		try {
 			final User user = userRepository.findByEmail(email);
 			if (user == null) {
+				System.out.println("没有此用户，按照游客处理");
 				return new org.springframework.security.core.userdetails.User(" ", " ", true, true, true, true,
-						getAuthorities(Arrays.asList(roleRepository.findByName("ROLE_USER"))));
+						getAuthorities(Arrays.asList(roleRepository.findByName("ROLE_GUEST"))));
 			}
 
 			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
@@ -68,7 +69,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	// UTIL
 
 	public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
-		return getGrantedAuthorities(getPrivileges(roles));
+		return getGrantedAuthorities_Roles_and_Privileges(roles);
 	}
 
 	private final List<String> getPrivileges(final Collection<Role> roles) {
@@ -83,10 +84,42 @@ public class MyUserDetailsService implements UserDetailsService {
 		return privileges;
 	}
 
-	private final List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
+	private final List<GrantedAuthority> getGrantedAuthorities_Roles_and_Privileges(final Collection<Role> roles) {
+		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		for (final Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+		}
+		List<String> privileges = getPrivileges(roles);
+		for (final String privilege : privileges) {
+			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
+		return authorities;
+	}
+
+	/**
+	 * 获得权限
+	 * 
+	 * @param privileges
+	 * @return
+	 */
+	private final List<GrantedAuthority> getGrantedAuthorities_Privileges(final List<String> privileges) {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (final String privilege : privileges) {
 			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
+		return authorities;
+	}
+
+	/**
+	 * 获得角色
+	 * 
+	 * @param roles
+	 * @return
+	 */
+	private final List<GrantedAuthority> getGrantedAuthorities_Roles(final List<String> roles) {
+		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		for (final String role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role));
 		}
 		return authorities;
 	}

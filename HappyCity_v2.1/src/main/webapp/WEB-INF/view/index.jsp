@@ -30,7 +30,7 @@
 		<h1>
 			<spring:message code="label.pages.home.message"></spring:message>
 		</h1>
-		<sec:authorize access="hasRole('MANAGE_PRIVILEGE')">
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
         This text is only visible to an admin
         <br />
 		</sec:authorize>

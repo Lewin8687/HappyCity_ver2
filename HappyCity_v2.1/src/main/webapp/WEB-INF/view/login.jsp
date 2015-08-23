@@ -68,7 +68,6 @@
 	margin-left: auto;
 	margin-right: auto
 }
-
 label {
 	padding-left: 0 !important
 }
