@@ -96,6 +96,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		return messageSource;
 	}
 
+
+	
 	@Bean
 	public EmailValidator usernameValidator() {
 		return new EmailValidator();

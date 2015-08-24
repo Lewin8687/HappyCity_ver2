@@ -1,5 +1,7 @@
 package com.zhongli.happycity.persistence.service;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -8,8 +10,13 @@ import com.zhongli.happycity.validation.ValidEmail;
 import com.zhongli.happycity.validation.ValidPassword;
 
 @PasswordMatches
-public class UserDto {
-    @NotNull
+public class UserDto implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@NotNull
     @Size(min = 1)
     private String firstName;
 
@@ -79,10 +86,12 @@ public class UserDto {
         this.matchingPassword = matchingPassword;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("User [firstName=").append(firstName).append("]").append("[lastName=").append(lastName).append("]").append("[email").append(email).append("]").append("[password").append(password).append("]");
-        return builder.toString();
-    }
+	@Override
+	public String toString() {
+		return "UserDto [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", role=" + role
+				+ "]";
+	}
+
+
+    
 }

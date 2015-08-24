@@ -1,5 +1,6 @@
 package com.zhongli.happycity.persistence.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -9,82 +10,95 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class Privilege {
+public class Privilege implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
+	private String name;
+	private String description;
 
-    public Privilege() {
-        super();
-    }
+	@ManyToMany(mappedBy = "privileges")
+	private Collection<Role> roles;
 
-    public Privilege(final String name) {
-        super();
-        this.name = name;
-    }
+	public Privilege() {
+		super();
+	}
 
-    //
+	public Privilege(final String name) {
+		super();
+		this.name = name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	//
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Collection<Role> getRoles() {
-        return roles;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public void setRoles(final Collection<Role> roles) {
-        this.roles = roles;
-    }
+	public Collection<Role> getRoles() {
+		return roles;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
+	public void setRoles(final Collection<Role> roles) {
+		this.roles = roles;
+	}
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Privilege privilege = (Privilege) obj;
-        if (!privilege.equals(privilege.name)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Privilege [name=").append(name).append("]").append("[id=").append(id).append("]");
-        return builder.toString();
-    }
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Privilege privilege = (Privilege) obj;
+		if (!privilege.equals(privilege.name)) {
+			return false;
+		}
+		return true;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		return "Privilege [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
+
 }

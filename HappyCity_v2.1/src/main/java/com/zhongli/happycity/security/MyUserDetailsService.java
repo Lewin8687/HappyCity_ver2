@@ -3,7 +3,9 @@ package com.zhongli.happycity.security;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,27 +56,35 @@ public class MyUserDetailsService implements UserDetailsService {
 		try {
 			final User user = userRepository.findByEmail(email);
 			if (user == null) {
-				System.out.println("没有此用户，按照游客处理");
-				return new org.springframework.security.core.userdetails.User(" ", " ", true, true, true, true,
-						getAuthorities(Arrays.asList(roleRepository.findByName("ROLE_GUEST"))));
+				System.out.println("No this user, as a GUEST.");
+				return new User(email, "", Arrays.asList(roleRepository.findByName("ROLE_GUEST")));
 			}
-
-			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-					user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+			//显示现在的用户信息
+			user.setAuthorities(getAuthorities(user.getRoles()));
+			System.out.println("直接或取得信息："+user);
+			System.out.println(user.getPassword());
+//			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+//					user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+			return user;
 		} catch (final Exception e) {
+			System.out.println("找不到用户");
 			throw new RuntimeException(e);
 		}
 	}
 
-	// UTIL
-
-	public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
+	/**
+	 * 选择用户详细信息
+	 * 
+	 * @param roles
+	 * @return
+	 */
+	public final Set<GrantedAuthority> getAuthorities(final Collection<Role> roles) {
 		return getGrantedAuthorities_Roles_and_Privileges(roles);
 	}
 
-	private final List<String> getPrivileges(final Collection<Role> roles) {
-		final List<String> privileges = new ArrayList<String>();
-		final List<Privilege> collection = new ArrayList<Privilege>();
+	private final Set<String> getPrivileges(final Collection<Role> roles) {
+		final Set<String> privileges = new HashSet<String>();
+		final Set<Privilege> collection = new HashSet<Privilege>();
 		for (final Role role : roles) {
 			collection.addAll(role.getPrivileges());
 		}
@@ -84,12 +94,18 @@ public class MyUserDetailsService implements UserDetailsService {
 		return privileges;
 	}
 
-	private final List<GrantedAuthority> getGrantedAuthorities_Roles_and_Privileges(final Collection<Role> roles) {
-		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	/**
+	 * 同时获得角色和权限
+	 * 
+	 * @param roles
+	 * @return
+	 */
+	private final Set<GrantedAuthority> getGrantedAuthorities_Roles_and_Privileges(final Collection<Role> roles) {
+		final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		for (final Role role : roles) {
 			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
-		List<String> privileges = getPrivileges(roles);
+		Set<String> privileges = getPrivileges(roles);
 		for (final String privilege : privileges) {
 			authorities.add(new SimpleGrantedAuthority(privilege));
 		}
@@ -116,10 +132,10 @@ public class MyUserDetailsService implements UserDetailsService {
 	 * @param roles
 	 * @return
 	 */
-	private final List<GrantedAuthority> getGrantedAuthorities_Roles(final List<String> roles) {
+	private final List<GrantedAuthority> getGrantedAuthorities_Roles(final Collection<Role> roles) {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		for (final String role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role));
+		for (final Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
 		return authorities;
 	}

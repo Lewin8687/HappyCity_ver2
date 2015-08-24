@@ -1,5 +1,6 @@
 package com.zhongli.happycity.spring;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -59,8 +60,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		// 添加私有监听区域的权限
 		final Privilege addPrivateAreaPrivilege = createPrivilegeIfNotFound("ADD_PRIVATE_AREA_PRIVILEGE");
 		// == create initial roles
-		final List<Privilege> adminPrivileges = Arrays.asList(markPrivilege, managePrivilege,
-				addPublicAreaPrivilege);
+		final List<Privilege> adminPrivileges = Arrays.asList(markPrivilege, managePrivilege, addPublicAreaPrivilege);
 		// 管理员角色
 		createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
 		// 研究人员角色
@@ -70,6 +70,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		createRoleIfNotFound("ROLE_STUDENT", Arrays.asList(basicPrivilege, markPrivilege, addPublicAreaPrivilege));
 		// 普通用户角色
 		createRoleIfNotFound("ROLE_USER", Arrays.asList(basicPrivilege, markPrivilege));
+		// 游客角色
+		createRoleIfNotFound("ROLE_GUEST", null);
 
 		// ==添加初始的账号
 		// 添加默认的管理员用户
@@ -105,8 +107,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			role = new Role(name);
 			role.setPrivileges(privileges);
 			roleRepository.save(role);
-		}else{
-			System.out.println("Role"+name+"exist");
+		} else {
+			System.out.println("Role" + name + "exist");
 		}
 		return role;
 	}
@@ -116,12 +118,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			final String password, List<Role> roles) {
 		User user = userRepository.findByEmail(email);
 		if (user == null) {
-			user = new User();
+			user = new User(email, passwordEncoder.encode(password), roles);
 			user.setFirstName(firstName);
 			user.setLastName(lastName);
-			user.setPassword(passwordEncoder.encode(password));
-			user.setEmail(email);
-			user.setRoles(roles);
 			user.setEnabled(true);
 			userRepository.save(user);
 		} else {
@@ -129,5 +128,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		}
 		return user;
 	}
+
 
 }

@@ -23,10 +23,10 @@
 </nav>
 
     <div class="container">
-            <sec:authorize ifNotGranted="MANAGE_PRIVILEGE">
+            <sec:authorize access="!hasRole('ROLE_ADMIN')">
                 <spring:message code="message.unauth"></spring:message>
             </sec:authorize>
-            <sec:authorize ifAnyGranted="MANAGE_PRIVILEGE">
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <h1>
                     <spring:message code="label.pages.admin.message"></spring:message>
                 </h1>
