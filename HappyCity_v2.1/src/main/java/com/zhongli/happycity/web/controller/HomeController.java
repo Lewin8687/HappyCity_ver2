@@ -13,4 +13,6 @@ public class HomeController {
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
 		return new ModelAndView("index");
 	}
+	
+	
 }

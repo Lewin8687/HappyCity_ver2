@@ -47,7 +47,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		}
 
 		// == create initial privileges
-		// 标注数据的权限
+		// 基本权限
 		final Privilege basicPrivilege = createPrivilegeIfNotFound("BASIC_PRIVILEGE");
 		// 标注数据的权限
 		final Privilege markPrivilege = createPrivilegeIfNotFound("MARK_PRIVILEGE");

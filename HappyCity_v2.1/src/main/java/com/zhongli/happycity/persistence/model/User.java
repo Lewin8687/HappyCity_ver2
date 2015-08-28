@@ -43,6 +43,7 @@ public class User implements UserDetails, CredentialsContainer {
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	private Date created_on;
+	private String nickName;
 	@ManyToMany
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id") , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id") )
 	private Collection<Role> roles;
@@ -301,6 +302,14 @@ public class User implements UserDetails, CredentialsContainer {
 			authorities.add(new SimpleGrantedAuthority(privilege));
 		}
 		return authorities;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	// /**
