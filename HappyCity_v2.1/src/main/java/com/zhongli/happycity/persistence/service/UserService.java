@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.zhongli.happycity.persistence.dao.PasswordResetTokenRepository;
 import com.zhongli.happycity.persistence.dao.RoleRepository;

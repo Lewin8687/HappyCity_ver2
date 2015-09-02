@@ -32,12 +32,14 @@ public class PersistenceJPAConfig {
 		super();
 	}
 
-	//
-
+	/**
+	 * 设置与用户登录注册相关的数据库
+	 * @return
+	 */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(dataSource());
+		em.setDataSource(userAccountDataSource());
 		em.setPackagesToScan(new String[] { "com.zhongli.happycity.persistence.model" });
 		final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
@@ -46,15 +48,15 @@ public class PersistenceJPAConfig {
 	}
 
 	@Bean
-	public DataSource dataSource() {
+	public DataSource userAccountDataSource() {
 		final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.user"));
-		dataSource.setPassword(env.getProperty("jdbc.pass"));
+		dataSource.setDriverClassName(env.getProperty("userinfo.jdbc.driverClassName"));
+		dataSource.setUrl(env.getProperty("userinfo.jdbc.url"));
+		dataSource.setUsername(env.getProperty("userinfo.jdbc.user"));
+		dataSource.setPassword(env.getProperty("userinfo.jdbc.pass"));
 		return dataSource;
 	}
-
+	
 	@Bean
 	public JpaTransactionManager transactionManager() {
 		final JpaTransactionManager transactionManager = new JpaTransactionManager();

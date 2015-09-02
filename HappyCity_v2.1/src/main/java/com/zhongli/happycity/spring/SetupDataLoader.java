@@ -1,6 +1,5 @@
 package com.zhongli.happycity.spring;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhongli.happycity.persistence.dao.PrivilegeRepository;
@@ -20,6 +20,7 @@ import com.zhongli.happycity.persistence.model.Role;
 import com.zhongli.happycity.persistence.model.User;
 
 @Component
+@TransactionConfiguration(transactionManager="userAccountTransactionManager")
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 	private boolean alreadySetup = false;
